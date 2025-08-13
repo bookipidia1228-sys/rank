@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+  <script>
+    (function(){
+      var path = window.location.pathname; 
+      var parts = path.replace(/^\/+|\/+$/g, '').split('/');
+      // Expected: ["rank", "index", "2025", "Science", "114143.html"]
+
+      var year = parts[2] || '';
+      var group = parts[3] || '';
+      var rollOrSchool = parts[4] ? parts[4].replace(/\.html$/, '') : '';
+
+      var qs = '?';
+      if (year) qs += 'year=' + encodeURIComponent(year);
+      if (group) qs += '&group=' + encodeURIComponent(group);
+      if (rollOrSchool) {
+        if (/^\d+$/.test(rollOrSchool)) {
+          qs += '&roll=' + rollOrSchool;
+        } else {
+          qs += '&school=' + encodeURIComponent(rollOrSchool);
+        }
+      }
+
+      window.location.replace('/rank/index.html' + qs);
+    })();
+  </script>
+</head>
+<body>
+Redirecting...
+</body>
+</html>
