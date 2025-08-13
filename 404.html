@@ -1,34 +1,396 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Redirecting...</title>
-  <script>
-    (function(){
-      var path = window.location.pathname; 
-      var parts = path.replace(/^\/+|\/+$/g, '').split('/');
-      // Expected: ["rank", "index", "2025", "Science", "114143.html"]
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/rank/">
 
-      var year = parts[2] || '';
-      var group = parts[3] || '';
-      var rollOrSchool = parts[4] ? parts[4].replace(/\.html$/, '') : '';
 
-      var qs = '?';
-      if (year) qs += 'year=' + encodeURIComponent(year);
-      if (group) qs += '&group=' + encodeURIComponent(group);
-      if (rollOrSchool) {
-        if (/^\d+$/.test(rollOrSchool)) {
-          qs += '&roll=' + rollOrSchool;
-        } else {
-          qs += '&school=' + encodeURIComponent(rollOrSchool);
-        }
-      }
+    <title>SSC 2025 Board Rank | Chittagong Board BISE CTG Rankings | BOARD RANK CHITTAGING | HSC 25 | SSC 24 | HSC 24 |SSC 23 |</title>
+    <meta name="description" content="Check SSC 2025 board ranks for Chittagong Board and all Bangladesh boards. Fast, unofficial rankings, school comparisons, GPA analytics, and roll-wise search.">
+    <meta name="keywords" content="SSC 2025, SSC Result 2025, Board Rank, Chittagong Board Rank, Bangladesh SSC Rank, SSC 2025 Rank, HSC 2024 Result, SSC 2024 Result, Board-wise Rank, CTG Board Result, GPA Rank Bangladesh">
+    <meta name="author" content="Hasnyne" />
+    <meta name="robots" content="index, follow" />
+    <meta name="google-site-verification" content="siNtiPjvsyElA07czENYNNvVQicPoBsDL_dU5cwSVQ0" />
+    <link rel="canonical" href="https://boradrankctg.github.io/rank/" />
+    <meta property="og:title" content="SSC 2025 Board Rank | Chittagong Board BISE CTG Rankings | BOARD RANK CHITTAGING | HSC 25 | SSC 24 | HSC 24 |SSC 23 |" />
+    <meta property="og:description" content="Unofficial SSC 2025 rankings for Chittagong Board and Bangladesh. Search by roll number, compare schools, view GPA, marks, and ranks easily." />
+    <meta property="og:url" content="https://boradrankctg.github.io/rank/" />
+    <meta property="og:type" content="website" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
-      window.location.replace('/rank/index.html' + qs);
-    })();
-  </script>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+
 </head>
+
+
 <body>
-Redirecting...
+    <header>
+       
+        <h1>Chattogram Board Students' SSC & HSC Ranking</h1>
+        <h2>Designed by Hasnyne & Tasin (Chittagong College'25)</h2>
+        
+    </header>
+
+
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#" id="currentYear">Year</a></li>
+            <li id="currentGroup" style="display:none;"></li>
+        </ul>
+    </nav>
+
+    <div class="icon-nav-wrapper" aria-label="Quick navigation">
+      <nav class="icon-nav-container">
+        <a href="index.html" title="Home" aria-label="Go to Home">
+          <i class="fas fa-house-chimney"></i>
+        </a>
+        <a href="about.html" title="About" aria-label="Learn About Us">
+          <i class="fas fa-user-tie"></i>
+        </a>
+        <a href="contactus.html" title="Contact Us" aria-label="Contact Us">
+          <i class="fas fa-envelope-open-text"></i>
+        </a>
+        <a href="review.html" title="Reviews" aria-label="See Reviews">
+          <i class="fas fa-star-half-stroke"></i>
+          
+        </a>
+        <button id="helpBtn" title="Help & Tips" aria-label="Help & Tips">
+          <i class="fas fa-question-circle"></i>
+        </button>
+        <a href="visitors.html" id="visitorsLink" title="Visitors" aria-label="Visitors">
+          <i class="fas fa-users"></i>
+        </a>
+        
+  
+      </nav>
+    </div>
+  
+      <div id="customBanner" class="info-banner">
+        ⚠️ This is not an official rank. It's prepared based on publicly available data.
+    </div>
+    
+    </div>
+    <main>
+        <section>
+    
+          <p id="selectPrompt">
+            PLEASE SELECT EXAM AND YEAR <i class="fas fa-arrow-down down-arrow"></i>
+          </p>
+          
+          
+          <div class="year-dropdown">
+                          <select id="yearDropdown" onchange="loadYear(this.value)">
+                    <option value="">Select Year and Exam</option>
+                    <option value="hsc_2025">HSC 2025</option>
+                    <option value="2025">SSC 2025</option>
+                    <option value="2024">SSC 2024</option>
+                    <option value="2023">SSC 2023</option>
+                    <option value="2022">SSC 2022</option>
+                    <option value="hsc_2024">HSC 2024</option>
+                    <option value="hsc_2023">HSC 2023</option>
+                </select>
+            </div>
+            <div id="content"></div>
+            
+            <div id="noDataMessage" style="display:none;">Oops! No data found.</div>
+        </section>
+
+<div class="new-box-wrapper" id="featuredBoxes">
+
+  <div class="featured-box" data-value="2025" onclick="handleFeaturedClick('2025', this)">
+    <div class="new-ribbon"><span style="position: relative; left: -14px;">RECHECK</span></div>
+
+    <div class="featured-text">
+      <div class="ssc-line">SSC</div>
+      <div class="year-line">25</div>
+    </div>
+  </div>
+  
+
+  <div class="featured-box" data-value="2024" onclick="handleFeaturedClick('2024', this)">
+    <div class="featured-text">
+      <div class="ssc-line">SSC</div>
+      <div class="year-line">24</div>
+    </div>
+  </div>
+
+  <div class="featured-box" data-value="2023" onclick="handleFeaturedClick('2023', this)">
+    <div class="featured-text">
+      <div class="new-ribbon">HOT</div>
+      <div class="ssc-line">SSC</div>
+      <div class="year-line">23</div>
+    </div>
+  </div>
+
+  <div class="featured-box" data-value="2022" onclick="handleFeaturedClick('2022', this)">
+    
+    <div class="featured-text">
+    
+      <div class="ssc-line">SSC</div>
+      <div class="year-line">22</div>
+    </div>
+  </div>
+
+  <div class="featured-box" data-value="hsc_2025" onclick="handleFeaturedClick('hsc_2025', this)">
+    <div class="new-ribbon">SOON</div>
+    <div class="featured-text">
+      <div class="ssc-line">HSC</div>
+      <div class="year-line">25</div>
+    </div>
+  </div>
+
+  <div class="featured-box" data-value="hsc_2024" onclick="handleFeaturedClick('hsc_2024', this)">
+    <div class="featured-text">
+      <div class="ssc-line">HSC</div>
+      <div class="year-line">24</div>
+    </div>
+  </div>
+
+  <div class="featured-box" data-value="hsc_2023" onclick="handleFeaturedClick('hsc_2023', this)">
+    <div class="featured-text">
+      <div class="ssc-line">HSC</div>
+      <div class="year-line">23</div>
+    </div>
+  </div>
+</div>
+
+          
+    </main>
+
+
+    
+    <div id="popupWindow" style="display:none;">
+        <button id="closePopup" class="close-btn">&times;</button>
+        <div class="popup-content" id="popupContent"></div>
+    </div>
+
+    <button onclick="scrollToTop()" id="scrollToTopBtn" title="Go to top">
+        <img src="arrow-up.png" alt="Scroll to top">
+    </button>
+
+    
+    <script type="module">
+
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, runTransaction, set, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        const firebaseConfig = {
+          apiKey: "AIzaSyBaKVrTWKeaUxa0EaiDBR8OGpGCAjxAcUA",
+          authDomain: "boardrankctg.firebaseapp.com",
+          databaseURL: "https://boardrankctg-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "boardrankctg",
+          storageBucket: "boardrankctg.firebasestorage.app",
+          messagingSenderId: "751761229963",
+          appId: "1:751761229963:web:43f9dbf71feef6dc9cec8e",
+          measurementId: "G-3Y6J44NWNH"
+        };
+      
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+window.db = db; 
+
+
+window.clickCountsCache = {};
+window._br_clickListenerSet = new Set();
+
+
+window.incrementClickCount = function(roll) {
+  if (!window.db) {
+    console.error("DB not ready for incrementClickCount");
+    return;
+  }
+  try {
+    const clickRef = ref(window.db, `clickCounts/${roll}`);
+    runTransaction(clickRef, (count) => {
+      return (count || 0) + 1;
+    }).catch(err => console.error('incrementClickCount error', err));
+  } catch (e) {
+    console.error('incrementClickCount exception', e);
+  }
+};
+
+window.listenClickCount = function(roll, cb) {
+  if (!window.db) {
+    console.error("DB not ready for listenClickCount");
+    cb(0);
+    return;
+  }
+  try {
+    const clickRef = ref(window.db, `clickCounts/${roll}`);
+    onValue(clickRef, (snap) => {
+      const val = snap.val() || 0;
+      window.clickCountsCache[roll] = val;
+      cb(val);
+    });
+  } catch (e) {
+    console.error('listenClickCount exception', e);
+    cb(0);
+  }
+};
+
+      
+        let userId = localStorage.getItem("userId");
+        if (!userId) {
+          userId = crypto.randomUUID();
+          localStorage.setItem("userId", userId);
+        }
+      
+        const ADMIN_ID = "admin1234";
+      
+        function trackVisit() {
+          runTransaction(ref(db, "siteStats/totalVisits"), (count) => (count || 0) + 1);
+          set(ref(db, `siteStats/activeUsers/${userId}`), Date.now());
+        }
+      
+
+        function showAdminStats() {
+          const box = document.createElement("div");
+          box.style = "max-width: 600px; margin: 30px auto; padding: 12px; border: 2px solid #333; background: #f8f8f8;";
+          box.innerHTML = `<h3>📊 Site Stats (Admin Only)</h3><div id="visitStats">Loading...</div>`;
+          document.body.appendChild(box);
+      
+          const statsRef = ref(db, "siteStats");
+      
+          onValue(statsRef, (snapshot) => {
+            const data = snapshot.val() || {};
+            const total = data.totalVisits || 0;
+            const active = data.activeUsers || {};
+            const now = Date.now();
+            const live = Object.values(active).filter(ts => now - ts < 5 * 60 * 1000).length;
+      
+            document.getElementById("visitStats").innerHTML = `
+              👁️ Total Visits: <strong>${total}</strong><br />
+              🟢 Live Visitors (past 5 min): <strong>${live}</strong>
+            `;
+          });
+        }
+      
+        trackVisit();
+        if (userId === ADMIN_ID) showAdminStats();
+      </script>
+      
+    <script src="script.js"></script>
+
+    <footer>
+      &copy; 2025 BoardRankCTG — Made by Hasnyne
+    </footer>
+  
 </body>
+<style>
+  #firstVisitHint {
+    position: absolute;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: floatY 1s ease-in-out infinite;
+    pointer-events: none;
+  }
+  #firstVisitHint img {
+    width: 40px;
+    height: 40px;
+    animation: wiggle 0.8s infinite;
+  }
+  #firstVisitHint .bubble {
+    background: #fff;
+    color: #222;
+    border: 2px solid #333;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 13px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    white-space: nowrap;
+  }
+  @keyframes wiggle {
+    0%,100% { transform: rotate(0deg); }
+    25% { transform: rotate(8deg); }
+    75% { transform: rotate(-8deg); }
+  }
+  @keyframes floatY {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  </style>
+  
+  <script>
+  function showFirstVisitHint() {
+    if (localStorage.getItem('nameClickHintShown')) return;
+  
+    const firstNameCell = document.querySelector('.student-name');
+    if (!firstNameCell) return;
+  
+    const hint = document.createElement('div');
+    hint.id = 'firstVisitHint';
+    hint.innerHTML = `
+      <img src="https://img.icons8.com/emoji/48/backhand-index-pointing-left-light-skin-tone.png" alt="👈">
+      <div class="bubble">Click a student's name<br>for detailed results</div>
+    `;
+    document.body.appendChild(hint);
+  
+    function positionHint() {
+      const rect = firstNameCell.getBoundingClientRect();
+      hint.style.top = `${rect.top + window.scrollY + 5}px`;
+      hint.style.left = `${rect.right + window.scrollX - 20}px`; 
+    }
+  
+    positionHint();
+    window.addEventListener('resize', positionHint);
+    window.addEventListener('scroll', positionHint);
+  
+    document.body.addEventListener('click', function handler(e) {
+      if (e.target.classList.contains('student-name')) {
+        hint.remove();
+        localStorage.setItem('nameClickHintShown', '1');
+        document.body.removeEventListener('click', handler);
+      }
+    }, true);
+  }
+
+  const originalUpdateTableData = updateTableData;
+  updateTableData = function() {
+    originalUpdateTableData.apply(this, arguments);
+    if (!document.getElementById('firstVisitHint')) {
+      setTimeout(showFirstVisitHint, 200);
+    }
+  };
+
+window.clickCountsCache = {};          
+window._br_clickListenerSet = new Set();
+
+window.incrementClickCount = function(roll) {
+  try {
+    runTransaction(ref(db, `clickCounts/${roll}`), (count) => (count || 0) + 1)
+      .catch(err => console.error('incrementClickCount error', err));
+  } catch (e) {
+    console.error('incrementClickCount exception', e);
+  }
+};
+
+window.listenClickCount = function(roll, cb) {
+  try {
+    const r = ref(db, `clickCounts/${roll}`);
+    onValue(r, (snap) => {
+      const val = snap.val() || 0;
+      window.clickCountsCache[roll] = val;
+      try { cb(val); } catch(e){ console.error('listen cb error', e); }
+    }, (err) => {
+      console.error('listenClickCount onValue error', err);
+      try { cb(0); } catch(e) {}
+    });
+  } catch (e) {
+    console.error('listenClickCount exception', e);
+    try { cb(0); } catch(e) {}
+  }
+};
+
+  </script>
+  
 </html>
