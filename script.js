@@ -4,40 +4,6 @@ const currentGroup = document.getElementById('currentGroup');
 const noDataMessage = document.getElementById('noDataMessage');
 const yearDropdown = document.getElementById('yearDropdown');
 
-// --- SEO URL helpers ---
-const BASE = '/rank';
-
-const slugify = (s) =>
-  String(s || '')
-    .normalize('NFKD').replace(/[\u0300-\u036f]/g,'')  // strip accents
-    .toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
-
-function buildUrl({year, group, type, idOrCode} = {}) {
-  if (!year) return `${BASE}`;
-  if (!group) return `${BASE}/${year}`;
-  if (!type)  return `${BASE}/${year}/${group}`;
-  return `${BASE}/${year}/${group}/${type}/${idOrCode}`;
-}
-
-function setCanonical(href) {
-  let link = document.querySelector('link[rel="canonical"]');
-  if (!link) {
-    link = document.createElement('link');
-    link.setAttribute('rel','canonical');
-    document.head.appendChild(link);
-  }
-  link.setAttribute('href', href);
-}
-
-function setMeta(name, content) {
-  let m = document.querySelector(`meta[name="${name}"]`);
-  if (!m) {
-    m = document.createElement('meta');
-    m.setAttribute('name', name);
-    document.head.appendChild(m);
-  }
-  m.setAttribute('content', content);
-}
 
 function xorDecrypt(dataBytes, key) {
   const keyBytes = new TextEncoder().encode(key);
@@ -184,8 +150,8 @@ function loadGroup(year, group) {
             <button id="lastBtn" onclick="handleLastButtonClick()">Last</button>
         </div>
     `;
-    history.pushState({}, '', buildUrl({ year, group }));
-    setCanonical(location.href);
+    const newUrl = `${location.pathname}?year=${year}&group=${group}`;
+    history.pushState({}, '', newUrl);
 
     printExamResultHeader(year); 
     fetchData(year, group);
@@ -704,12 +670,8 @@ try {
 try {
   const params = new URLSearchParams(window.location.search);
   params.set('school', schoolName);
-  const y = (document.getElementById('currentYear')?.textContent || '').trim();
-  const grp = (document.getElementById('currentGroup')?.textContent || '').split(' ')[0];
-  history.pushState({}, '', buildUrl({ year: y, group: grp, type:'school', idOrCode: slugify(schoolName) }));
-  setCanonical(location.href);
-  setMeta('description', `Ranking list for ${schoolName} — ${y} ${grp} (Chattogram Board).`);
-  } catch (e) {
+  history.pushState({}, '', `${location.pathname}?${params.toString()}`);
+} catch (e) {
   console.error('Error updating URL for school:', e);
 }
 
@@ -781,44 +743,15 @@ function updateTableData() {
 const nameId = `name-${student.roll}`;
 const isAdmin = (localStorage.getItem('userId') === 'admin1234'); // matches your existing check
 
-const yText = currentYear.textContent.split(' ')[1];
-const gText = currentGroup.textContent.split(' ')[0];
-const schoolCode = slugify(student.Instituation);
-
 row.innerHTML = `
   <td>${allData.findIndex(s => s.roll === student.roll) + 1}</td>
-  <td class="student-name">
-    <a href="${buildUrl({ year: yText, group: gText, type: 'student', idOrCode: String(student.roll) })}" 
-       class="js-student" data-roll="${student.roll}">
-       ${student.name}
-    </a>
-  </td>
-  <td class="student-roll">
-    <a href="${buildUrl({ year: yText, group: gText, type: 'student', idOrCode: String(student.roll) })}" 
-       class="js-student" data-roll="${student.roll}">
-       ${student.roll}
-    </a>
-  </td>
+
+  <td class="student-name" id="${nameId}">${student.name}${isAdmin ? ` [${(window.clickCountsCache && window.clickCountsCache[student.roll]) || 0}]` : ''}</td>
+  <td class="student-roll">${student.roll}</td>
   <td>${student.gpa}</td>
   <td>${student.total}</td>
-  <td class="student-school">
-    <a href="${buildUrl({ year: yText, group: gText, type: 'school', idOrCode: schoolCode })}" 
-       class="js-school" data-name="${student.Instituation}">
-       ${student.Instituation}
-    </a>
-  </td>
+  <td class="student-school">${student.Instituation}</td>
 `;
-row.querySelectorAll('a.js-student').forEach(a => {
-  a.addEventListener('click', (e) => {
-    e.preventDefault();
-    showIndividualResultWithCheck(student.roll, yText, gText);
-  });
-});
-
-row.querySelector('a.js-school').addEventListener('click', (e) => {
-  e.preventDefault();
-  showSchoolRanking(student.Instituation.trim());
-});
 
 // name click -> increment counter (if helper available) then open popup (with existing check)
 const nameCell = row.querySelector('.student-name');
@@ -1312,10 +1245,6 @@ try {
             popup.classList.add('popup');
             popup.innerHTML = popupContent;
             document.body.appendChild(popup);
-            history.pushState({}, '', buildUrl({ year, group, type: 'student', idOrCode: String(roll) }));
-setCanonical(location.href);
-setMeta('description', `Board rank & subject marks for roll ${roll} (${year} ${group}).`);
-
             document.body.classList.add('locked');
         })
         .catch(error => {
@@ -1360,7 +1289,7 @@ function copyFullResult(btn) {
     const roll = popup?.innerHTML.match(/Roll:\s*(\d+)/)?.[1];
     const year = currentYear?.textContent?.trim();
     const group = currentGroup?.textContent?.split(' ')[0];
-    const url = `https://boardrankctg.vercel.app${buildUrl({ year, group, type:'student', idOrCode: String(roll) })}`;
+    const url = `https://boradrankctg.github.io/rank/index.html?year=${year}&group=${encodeURIComponent(group)}&roll=${roll}`;
   
     navigator.clipboard.writeText(url).then(() => {
       showToast("🔗 Link copied");
