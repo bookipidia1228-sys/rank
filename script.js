@@ -4,6 +4,40 @@ const currentGroup = document.getElementById('currentGroup');
 const noDataMessage = document.getElementById('noDataMessage');
 const yearDropdown = document.getElementById('yearDropdown');
 
+// --- SEO URL helpers ---
+const BASE = '/rank';
+
+const slugify = (s) =>
+  String(s || '')
+    .normalize('NFKD').replace(/[\u0300-\u036f]/g,'')  // strip accents
+    .toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+
+function buildUrl({year, group, type, idOrCode} = {}) {
+  if (!year) return `${BASE}`;
+  if (!group) return `${BASE}/${year}`;
+  if (!type)  return `${BASE}/${year}/${group}`;
+  return `${BASE}/${year}/${group}/${type}/${idOrCode}`;
+}
+
+function setCanonical(href) {
+  let link = document.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement('link');
+    link.setAttribute('rel','canonical');
+    document.head.appendChild(link);
+  }
+  link.setAttribute('href', href);
+}
+
+function setMeta(name, content) {
+  let m = document.querySelector(`meta[name="${name}"]`);
+  if (!m) {
+    m = document.createElement('meta');
+    m.setAttribute('name', name);
+    document.head.appendChild(m);
+  }
+  m.setAttribute('content', content);
+}
 
 function xorDecrypt(dataBytes, key) {
   const keyBytes = new TextEncoder().encode(key);
@@ -68,153 +102,6 @@ function showRankTipsPopup() {
     
 }
 document.getElementById('helpBtn').addEventListener('click', showRankTipsPopup);
-/* ---------- Pretty URL Router (GitHub Pages friendly) ---------- */
-const APP_BASE = '/rank/';
-
-function slugifySchool(name) {
-  return String(name || '')
-    .normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
-    .toLowerCase()
-    .replace(/&/g,' and ')
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'')
-    .slice(0,80);
-}
-
-function buildPrettyUrl({ year, group, roll, schoolCode }) {
-  // Desired patterns:
-  // /rank/index/2025.html
-  // /rank/index/2025/Science.html
-  // /rank/index/2025/Science/114143.html
-  // /rank/index/2025/Science/{schoolCode}.html
-  const base = APP_BASE + 'index/';
-  if (!year) return base + 'index.html';
-  if (!group) return base + encodeURIComponent(year) + '.html';
-  if (roll || schoolCode) {
-    const last = roll ? encodeURIComponent(String(roll)) : encodeURIComponent(String(schoolCode));
-    return base + encodeURIComponent(year) + '/' + encodeURIComponent(group) + '/' + last + '.html';
-  }
-  return base + encodeURIComponent(year) + '/' + encodeURIComponent(group) + '.html';
-}
-
-function updateUrl(state) {
-  const url = buildPrettyUrl(state);
-  history.pushState(state, '', url);
-}
-
-function findSchoolByCode(code) {
-  // Try current dropdown set first
-  try {
-    const names = Array.from(InstituationSet || []);
-    const hit = names.find(n => slugifySchool(n) === code);
-    if (hit) return hit;
-  } catch (e) {}
-  // Fallback: scan allData if loaded
-  if (Array.isArray(window.allData) && allData.length) {
-    const uniq = Array.from(new Set(allData.map(s => s.Instituation).filter(Boolean)));
-    const hit = uniq.find(n => slugifySchool(n) === code);
-    if (hit) return hit;
-  }
-  return null;
-}
-
-// Read both the new pretty path and the old query (?year=...&group=...)
-function parseFromUrl() {
-  const path = location.pathname.replace(/^\/+/, '');
-  // Expect: rank/index/...
-  const parts = path.split('/');
-  const idx = parts.indexOf('rank');
-  const afterRank = idx >= 0 ? parts.slice(idx + 1) : parts;
-  // afterRank[0] should be 'index'
-  const segs = afterRank[1] === 'index' ? afterRank.slice(2) : afterRank.slice(1);
-  let year, group, roll, schoolCode;
-
-  if (segs && segs.length) {
-    // Cases by length:
-    // [ "2025.html" ]
-    // [ "2025", "Science.html" ]
-    // [ "2025", "Science", "114143.html" ]  OR  schoolCode instead of roll
-    const last = segs[segs.length - 1] || '';
-    const lastBase = last.replace(/\.html?$/,'');
-    if (segs.length === 1) {
-      year = decodeURIComponent(lastBase);
-    } else if (segs.length === 2) {
-      year = decodeURIComponent(segs[0]);
-      group = decodeURIComponent(lastBase);
-    } else if (segs.length >= 3) {
-      year = decodeURIComponent(segs[0]);
-      group = decodeURIComponent(segs[1]);
-      const tail = decodeURIComponent(lastBase);
-      if (/^\d+$/.test(tail)) roll = tail; else schoolCode = tail;
-    }
-  }
-
-  // Fallback to old query params for backward-compat
-  const qs = new URLSearchParams(location.search);
-  year = year || qs.get('year') || undefined;
-  group = group || qs.get('group') || undefined;
-  roll = roll || qs.get('roll') || undefined;
-  const schoolParam = qs.get('school');
-  if (!schoolCode && schoolParam) schoolCode = slugifySchool(schoolParam);
-
-  return { year, group, roll, schoolCode };
-}
-
-function handleRoute(route) {
-  const { year, group, roll, schoolCode } = route;
-
-  // Close any open popup if navigating
-  if (document.querySelector('.popup')) {
-    try { closePopup(); } catch (e) {}
-  }
-
-  if (year && group && roll) {
-    // ensure list is loaded, then open the person
-    if (window.yearDropdown) {
-      yearDropdown.value = year;
-      yearDropdown.style.display = 'none';
-    }
-    document.getElementById('selectPrompt')?.remove();
-    document.querySelectorAll('.featured-box').forEach(b => b.remove());
-    printExamResultHeader(year);
-    fetchData(year, group);
-    setTimeout(() => showIndividualResult(roll, year, group), 300);
-    return;
-  }
-
-  if (year && group) {
-    if (window.yearDropdown) {
-      yearDropdown.value = year;
-      yearDropdown.style.display = 'none';
-    }
-    document.getElementById('selectPrompt')?.remove();
-    document.querySelectorAll('.featured-box').forEach(b => b.remove());
-    loadGroup(year, group);
-    if (schoolCode) window.__pendingSchoolCode = schoolCode; // handled after data load
-    // Basic SEO title for list page
-    try { document.title = `${group} | ${String(year).replace('hsc_', '')} ${String(year).includes('hsc') ? 'HSC' : 'SSC'}`; } catch(e){}
-    return;
-  }
-
-  if (year) {
-    loadYear(year);
-    try { document.title = `${String(year).replace('hsc_', '')} ${String(year).includes('hsc') ? 'HSC' : 'SSC'} | Board Rank`; } catch(e){}
-    return;
-  }
-
-  // default home view (no year)
-}
-
-// Initial route on first load
-document.addEventListener('DOMContentLoaded', () => {
-  handleRoute(parseFromUrl());
-});
-
-// Single popstate handler (back/forward)
-window.addEventListener('popstate', () => {
-  handleRoute(parseFromUrl());
-});
-/* ---------- End pretty router ---------- */
 
 function loadYear(year) {
     if (year) {
@@ -223,8 +110,9 @@ function loadYear(year) {
         document.querySelectorAll('.featured-box').forEach(b => b.remove());
 
 
-        updateUrl({ year });
-
+        const newUrl = `${location.pathname}?year=${year}`;
+        history.pushState({}, '', newUrl);
+    
         currentYear.textContent = ` ${year}`;
         currentGroup.style.display = 'none';
         noDataMessage.style.display = 'none';
@@ -296,9 +184,9 @@ function loadGroup(year, group) {
             <button id="lastBtn" onclick="handleLastButtonClick()">Last</button>
         </div>
     `;
-    updateUrl({ year, group });
-    try { document.title = `${group} | ${String(year).replace('hsc_', '')} ${String(year).includes('hsc') ? 'HSC' : 'SSC'}`; } catch(e){}
-    
+    history.pushState({}, '', buildUrl({ year, group }));
+    setCanonical(location.href);
+
     printExamResultHeader(year); 
     fetchData(year, group);
 }
@@ -577,7 +465,7 @@ if (clickCount <= 2) {
               @keyframes spin { to { transform: rotate(360deg); } }
           </style>
       `;
-  ge
+  
       setTimeout(() => {
           body.innerHTML = `
               <div style="text-align:center; padding:20px;">
@@ -814,11 +702,15 @@ try {
 } catch (e) { /* no-op */ }
 
 try {
-  const yy = (currentYear && currentYear.textContent) ? currentYear.textContent.trim() : null;
-  const grp = (currentGroup && currentGroup.textContent) ? currentGroup.textContent.split(' ')[0] : null;
-  updateUrl({ year: yy, group: grp, schoolCode: slugifySchool(schoolName) });
-} catch (e) {
-  console.error('Error updating pretty URL for school:', e);
+  const params = new URLSearchParams(window.location.search);
+  params.set('school', schoolName);
+  const y = (document.getElementById('currentYear')?.textContent || '').trim();
+  const grp = (document.getElementById('currentGroup')?.textContent || '').split(' ')[0];
+  history.pushState({}, '', buildUrl({ year: y, group: grp, type:'school', idOrCode: slugify(schoolName) }));
+  setCanonical(location.href);
+  setMeta('description', `Ranking list for ${schoolName} — ${y} ${grp} (Chattogram Board).`);
+  } catch (e) {
+  console.error('Error updating URL for school:', e);
 }
 
 const schoolData = allData.filter(student => (student.Instituation || '').trim().toLowerCase() === schoolName.trim().toLowerCase());
@@ -889,15 +781,44 @@ function updateTableData() {
 const nameId = `name-${student.roll}`;
 const isAdmin = (localStorage.getItem('userId') === 'admin1234'); // matches your existing check
 
+const yText = currentYear.textContent.split(' ')[1];
+const gText = currentGroup.textContent.split(' ')[0];
+const schoolCode = slugify(student.Instituation);
+
 row.innerHTML = `
   <td>${allData.findIndex(s => s.roll === student.roll) + 1}</td>
-
-  <td class="student-name" id="${nameId}">${student.name}${isAdmin ? ` [${(window.clickCountsCache && window.clickCountsCache[student.roll]) || 0}]` : ''}</td>
-  <td class="student-roll">${student.roll}</td>
+  <td class="student-name">
+    <a href="${buildUrl({ year: yText, group: gText, type: 'student', idOrCode: String(student.roll) })}" 
+       class="js-student" data-roll="${student.roll}">
+       ${student.name}
+    </a>
+  </td>
+  <td class="student-roll">
+    <a href="${buildUrl({ year: yText, group: gText, type: 'student', idOrCode: String(student.roll) })}" 
+       class="js-student" data-roll="${student.roll}">
+       ${student.roll}
+    </a>
+  </td>
   <td>${student.gpa}</td>
   <td>${student.total}</td>
-  <td class="student-school">${student.Instituation}</td>
+  <td class="student-school">
+    <a href="${buildUrl({ year: yText, group: gText, type: 'school', idOrCode: schoolCode })}" 
+       class="js-school" data-name="${student.Instituation}">
+       ${student.Instituation}
+    </a>
+  </td>
 `;
+row.querySelectorAll('a.js-student').forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    showIndividualResultWithCheck(student.roll, yText, gText);
+  });
+});
+
+row.querySelector('a.js-school').addEventListener('click', (e) => {
+  e.preventDefault();
+  showSchoolRanking(student.Instituation.trim());
+});
 
 // name click -> increment counter (if helper available) then open popup (with existing check)
 const nameCell = row.querySelector('.student-name');
@@ -1245,8 +1166,8 @@ function showIndividualResult(roll, year, group) {
 
     const fileName = `data_${year}_${group.toLowerCase()}_individual.txt`;
     const isHSC = fileName.includes("hsc");
-    updateUrl({ year, group, roll });
-
+    const newUrl = `${location.pathname}?year=${year}&group=${group}&roll=${roll}`;
+    history.pushState({}, '', newUrl);
 
     fetch(fileName)
         .then(response => response.text())
@@ -1391,6 +1312,10 @@ try {
             popup.classList.add('popup');
             popup.innerHTML = popupContent;
             document.body.appendChild(popup);
+            history.pushState({}, '', buildUrl({ year, group, type: 'student', idOrCode: String(roll) }));
+setCanonical(location.href);
+setMeta('description', `Board rank & subject marks for roll ${roll} (${year} ${group}).`);
+
             document.body.classList.add('locked');
         })
         .catch(error => {
@@ -1435,7 +1360,7 @@ function copyFullResult(btn) {
     const roll = popup?.innerHTML.match(/Roll:\s*(\d+)/)?.[1];
     const year = currentYear?.textContent?.trim();
     const group = currentGroup?.textContent?.split(' ')[0];
-    const url = `https://boradrankctg.github.io/rank/index.html?year=${year}&group=${encodeURIComponent(group)}&roll=${roll}`;
+    const url = `https://boardrankctg.vercel.app${buildUrl({ year, group, type:'student', idOrCode: String(roll) })}`;
   
     navigator.clipboard.writeText(url).then(() => {
       showToast("🔗 Link copied");
@@ -1659,8 +1584,33 @@ function scrollToTop() {
 }
 
 window.addEventListener('popstate', function () {
-  if (document.querySelector('.popup')) { closePopup(); return; }
-  handleRoute(parseFromUrl());
+  const params = new URLSearchParams(window.location.search);
+  const year = params.get('year');
+  const group = params.get('group');
+  const roll = params.get('roll');
+
+
+  if (document.querySelector('.popup')) {
+      closePopup();
+      return;
+  }
+
+  // If roll present → show individual result
+  if (year && group && roll) {
+      showIndividualResult(roll, year, group);
+  }
+  // If year & group present → load that table
+  else if (year && group) {
+      loadGroup(year, group);
+  }
+  // If only year present → load group selection
+  else if (year) {
+      loadYear(year);
+  }
+  // No params → go to home/default
+  else {
+      location.reload(); // or your home view loader
+  }
 });
 
 
@@ -2078,12 +2028,11 @@ function handleURLParams() {
             }, 1000);
         }
         const school = params.get('school');
-        if (window.__pendingSchoolCode) {
-          const resolved = findSchoolByCode(window.__pendingSchoolCode);
-          if (resolved) {
-            setTimeout(() => { showSchoolRanking(resolved); }, 300);
-          }
-          window.__pendingSchoolCode = null;
+        if (school) {
+          // wait a little so fetchData(year, group) finishes and DOM is ready
+          setTimeout(() => {
+            showSchoolRanking(school);
+          }, 1000);
         }
         
     } else if (year) {
