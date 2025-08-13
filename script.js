@@ -76,8 +76,8 @@ function loadYear(year) {
         document.querySelectorAll('.featured-box').forEach(b => b.remove());
 
 
-        const newUrl = `${location.pathname}?year=${year}`;
-        history.pushState({}, '', newUrl);
+        goTo({ year });
+
     
         currentYear.textContent = ` ${year}`;
         currentGroup.style.display = 'none';
@@ -150,8 +150,7 @@ function loadGroup(year, group) {
             <button id="lastBtn" onclick="handleLastButtonClick()">Last</button>
         </div>
     `;
-    const newUrl = `${location.pathname}?year=${year}&group=${group}`;
-    history.pushState({}, '', newUrl);
+    goTo({ year, group });
 
     printExamResultHeader(year); 
     fetchData(year, group);
@@ -1099,8 +1098,8 @@ function showIndividualResult(roll, year, group) {
 
     const fileName = `data_${year}_${group.toLowerCase()}_individual.txt`;
     const isHSC = fileName.includes("hsc");
-    const newUrl = `${location.pathname}?year=${year}&group=${group}&roll=${roll}`;
-    history.pushState({}, '', newUrl);
+    goTo({ year, group, roll });
+
 
     fetch(fileName)
         .then(response => response.text())
