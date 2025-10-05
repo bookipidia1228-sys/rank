@@ -1,395 +1,655 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Magi | Test Yourself</title>
 
-    <title>SSC 2025 Board Rank | Chittagong Board BISE CTG Rankings | BOARD RANK CHITTAGING | HSC 25 | SSC 24 | HSC 24 |SSC 23 |</title>
-    <meta name="description" content="Check SSC 2025 board ranks for Chittagong Board and all Bangladesh boards. Fast, unofficial rankings, school comparisons, GPA analytics, and roll-wise search.">
-    <meta name="keywords" content="SSC 2025, SSC Result 2025, Board Rank, Chittagong Board Rank, Bangladesh SSC Rank, SSC 2025 Rank, HSC 2024 Result, SSC 2024 Result, Board-wise Rank, CTG Board Result, GPA Rank Bangladesh">
-    <meta name="author" content="Hasnyne" />
-    <meta name="robots" content="index, follow" />
-    <meta name="google-site-verification" content="siNtiPjvsyElA07czENYNNvVQicPoBsDL_dU5cwSVQ0" />
-    <link rel="canonical" href="https://boradrankctg.github.io/rank/" />
-    <meta property="og:title" content="SSC 2025 Board Rank | Chittagong Board BISE CTG Rankings | BOARD RANK CHITTAGING | HSC 25 | SSC 24 | HSC 24 |SSC 23 |" />
-    <meta property="og:description" content="Unofficial SSC 2025 rankings for Chittagong Board and Bangladesh. Search by roll number, compare schools, view GPA, marks, and ranks easily." />
-    <meta property="og:url" content="https://boradrankctg.github.io/rank/" />
-    <meta property="og:type" content="website" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+<style>
+  :root{
+    --ink:#000;
+    --fg:#222;
+    --bg:#fff;
+    --pink:#ff69b4;
+    --hotPink:#ff1493;
+    --cyan:#00ffff;
+    --softCyan:#99ffff;
+    --gray:#eee;
+    --shadow:0 10px 24px rgba(0,0,0,0.15);
+    --radius:18px;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    font-family:'Baloo 2', cursive;
+    background: var(--bg);
+    color: var(--fg);
+    overflow-x:hidden;
+    overflow-y:auto;
+  }
 
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
-    <script src="pretty-urls.js"></script>
+  /* App container (wider on desktop) */
+  .app{
+    width:min(1200px, 94vw);
+    margin: 0 auto;
+    padding: 16px 0 40px;
+  }
 
+  /* Header row */
+  #topRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+
+  /* Logo */
+  #logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  #logo i{
+    font-size:58px;
+    color:var(--hotPink);
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 2px 0 var(--ink));
+    animation: float 3s ease-in-out infinite;
+  }
+  #logo h1{
+    font-family:'Fredoka One', cursive;
+    font-size:42px;
+    color:var(--pink);
+    text-shadow: 1px 1px var(--ink);
+    letter-spacing: 0.5px;
+  }
+  h2{
+    font-size:22px;
+    color:var(--hotPink);
+    margin-top:6px;
+  }
+
+  /* Progress */
+  #progressWrap{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width: 100%;
+  }
+  #progressMeta{
+    min-width: 110px;
+    font-weight:700;
+    color: var(--hotPink);
+    text-shadow: 0.5px 0.5px var(--ink);
+  }
+  #progressContainer{
+    flex:1;
+    height:18px;
+    background:var(--gray);
+    border-radius:12px;
+    border:2px solid var(--ink);
+    overflow: hidden;
+  }
+  #progressBar{
+    width:0%;
+    height:100%;
+    background:var(--pink);
+    border-radius:12px;
+    transition: width 0.3s ease;
+  }
+
+  /* Question + options */
+  #question{
+    font-size:28px;
+    text-align:center;
+    margin: 24px 8px 12px;
+  }
+
+  #options{
+    margin-top:8px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+  @media(min-width: 1000px){
+    #options{
+      grid-template-columns: 1fr 1fr; /* use the width on desktop */
+      gap:16px;
+    }
+  }
+
+  .option{
+    padding:18px;
+    font-size:20px;
+    font-weight:700;
+    border:3px solid var(--ink);
+    border-radius:var(--radius);
+    cursor:pointer;
+    text-align:left;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    box-shadow: var(--shadow);
+  }
+  .option:hover{ transform: translateY(-2px); filter: brightness(1.03); }
+  .option span.letter{
+    font-weight:900; font-size:22px; width:28px; text-align:center; flex: 0 0 28px;
+  }
+
+  /* A-E colors */
+  .optA{ background:#ff4d4d; color:#fff; }
+  .optB{ background:#4d79ff; color:#fff; }
+  .optC{ background:#ffd633; color:#000; }
+  .optD{ background:#33cc33; color:#fff; }
+  .optE{ background:#ff99cc; color:#000; }
+
+  /* Outro */
+  #outro{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding: 16px;
+    margin-top: 24px;
+  }
+  #finalTitle{
+    font-size:24px;
+    color:#333;
+  }
+  #finalScore{
+    font-size:72px;
+    color:var(--hotPink);
+    font-weight:900;
+    text-shadow:2px 2px var(--ink);
+    margin: 18px 0 6px;
+    line-height: 1;
+  }
+  #finalLine{
+    font-size:16px;
+    color:#444;
+    margin-bottom: 8px;
+  }
+  #finalActions{
+    display:flex;
+    flex-wrap: wrap;
+    gap:10px;
+    margin-top:14px;
+  }
+  .btn{
+    padding:12px 20px;
+    font-size:18px;
+    font-weight:800;
+    border:3px solid var(--ink);
+    border-radius: 16px;
+    cursor:pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .btn:hover{ transform: translateY(-2px); }
+  .btn-primary{ background:var(--cyan); color:#000; }
+  .btn-primary:hover{ background:var(--softCyan); }
+  .btn-ghost{ background:#fff; }
+  .btn-pink{ background:var(--pink); color:#fff; }
+  .btn-pink:hover{ filter:brightness(1.05); }
+
+  /* Result modal */
+  #resultModal{
+    position: fixed;
+    inset: 0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(2px);
+    z-index: 60;
+  }
+  .modalCard{
+    width:min(900px, 92vw);
+    max-height: 88vh;
+    overflow:auto;
+    background: #fff;
+    border:3px solid var(--ink);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding:16px 14px 18px;
+  }
+  .modalHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding: 6px 6px 12px;
+    border-bottom: 2px dashed #222;
+  }
+  .modalTitle{
+    display:flex; align-items:center; gap:10px; font-weight:900; color:var(--hotPink);
+    font-size:20px;
+  }
+  .closeX{
+    border:none; background:#fff; cursor:pointer; font-size:22px; width:36px; height:36px; border-radius:10px;
+    border:2px solid var(--ink);
+  }
+  .verdictList{
+    margin-top:12px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  @media(min-width:900px){
+    .verdictList{ grid-template-columns: 1fr 1fr; }
+  }
+  .verdictCard{
+    border:3px solid var(--ink);
+    border-radius:16px;
+    padding:14px;
+    background: linear-gradient(135deg, #fff 0%, #fff 68%, rgba(255,105,180,0.1) 100%);
+  }
+  .vTop{
+    display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;
+  }
+  .badge{
+    padding:4px 10px; border:2px solid var(--ink); border-radius:12px; font-weight:800; font-size:12px; background:#fff;
+  }
+  .badge-theme{ color: var(--hotPink); }
+  .badge-score{ background: #ffd633; }
+  .qText{ font-weight:800; margin-bottom:6px; }
+  .choiceText{ font-size:14px; opacity:0.9; margin-bottom:8px; }
+  .verdictText{ font-size:15px; line-height:1.35; }
+
+  /* Intro + Outro splash */
+  .splash{
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index: 100;
+  }
+  .splashInner{
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    transform: translateY(10px);
+    animation: rise 700ms ease forwards;
+  }
+  .splashLogo{
+    display:flex; align-items:center; gap:12px;
+    filter: drop-shadow(0 2px 0 var(--ink));
+  }
+  .splashLogo i{
+    font-size:70px; color: var(--hotPink); animation: float 3s ease-in-out infinite;
+  }
+  .splashTitle{
+    font-family:'Fredoka One', cursive;
+    font-size:44px; color:var(--pink); text-shadow: 1px 1px var(--ink);
+  }
+  .splashHint{ font-size:14px; opacity:0.7; }
+  .splashHide{ animation: fadeOut 600ms ease forwards; }
+
+  /* Confetti-ish stars on outro splash (lightweight) */
+  .star{
+    position:absolute;
+    width:6px; height:6px; background: var(--pink);
+    border:2px solid var(--ink);
+    border-radius:50%;
+    opacity:0;
+    transform: translateY(0);
+    animation: pop 1200ms ease forwards;
+  }
+
+  /* Toast */
+  .toast{
+    position: fixed;
+    right: 14px; bottom: 14px;
+    background:#000; color:#fff;
+    border-radius:12px;
+    padding:10px 14px;
+    font-weight:800;
+    opacity:0; transform: translateY(8px);
+    transition: all .25s ease;
+    z-index:70;
+  }
+  .toast.show{ opacity:1; transform: translateY(0); }
+
+  /* Animations */
+  @keyframes float{ 0%,100%{ transform: translateY(0) rotate(-10deg); } 50%{ transform: translateY(-6px) rotate(-10deg);} }
+  @keyframes rise{ from{ opacity:0; transform: translateY(18px);} to{ opacity:1; transform: translateY(0);} }
+  @keyframes fadeOut{ to{ opacity:0; visibility:hidden; } }
+  @keyframes pop{ 0%{ opacity:0; transform: translateY(0) scale(0.5);} 30%{ opacity:1; } 100%{ opacity:0; transform: translateY(-80px) scale(1); } }
+
+  /* Responsive tweaks */
+  @media(max-width:768px){
+    #logo h1{ font-size:36px; }
+    h2{ font-size:20px; }
+    #question{ font-size:24px; margin: 18px 8px 10px; }
+    .option{ font-size:18px; padding:16px; }
+    #finalScore{ font-size:56px; }
+    .btn{ font-size:16px; }
+  }
+  @media(max-width:480px){
+    #logo h1{ font-size:28px; }
+    h2{ font-size:18px; }
+    #question{ font-size:20px; margin: 14px 6px 8px; }
+    .option{ font-size:16px; padding:14px; }
+    #finalScore{ font-size:42px; }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
 </head>
-
-
 <body>
-    <header>
-       
-        <h1>Chattogram Board Students' SSC & HSC Ranking</h1>
-        <h2>Designed by Hasnyne & Tasin (Chittagong College'25)</h2>
-        
-    </header>
 
-
-    <nav aria-label="breadcrumb">
-        <ul class="breadcrumb">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="#" id="currentYear">Year</a></li>
-            <li id="currentGroup" style="display:none;"></li>
-        </ul>
-    </nav>
-
-    <div class="icon-nav-wrapper" aria-label="Quick navigation">
-      <nav class="icon-nav-container">
-        <a href="index.html" title="Home" aria-label="Go to Home">
-          <i class="fas fa-house-chimney"></i>
-        </a>
-        <a href="about.html" title="About" aria-label="Learn About Us">
-          <i class="fas fa-user-tie"></i>
-        </a>
-        <a href="contactus.html" title="Contact Us" aria-label="Contact Us">
-          <i class="fas fa-envelope-open-text"></i>
-        </a>
-        <a href="review.html" title="Reviews" aria-label="See Reviews">
-          <i class="fas fa-star-half-stroke"></i>
-          
-        </a>
-        <button id="helpBtn" title="Help & Tips" aria-label="Help & Tips">
-          <i class="fas fa-question-circle"></i>
-        </button>
-        <a href="visitors.html" id="visitorsLink" title="Visitors" aria-label="Visitors">
-          <i class="fas fa-users"></i>
-        </a>
-        
-  
-      </nav>
+<!-- Intro Splash (auto, no skip) -->
+<div id="introSplash" class="splash">
+  <div class="splashInner">
+    <div class="splashLogo">
+      <i class="fa-solid fa-user-astronaut"></i>
+      <div class="splashTitle">Magi</div>
     </div>
-  
-      <div id="customBanner" class="info-banner">
-        ⚠️ This is not an official rank. It's prepared based on publicly available data.
-    </div>
-    
-    </div>
-    <main>
-        <section>
-    
-          <p id="selectPrompt">
-            PLEASE SELECT EXAM AND YEAR <i class="fas fa-arrow-down down-arrow"></i>
-          </p>
-          
-          
-          <div class="year-dropdown">
-                          <select id="yearDropdown" onchange="loadYear(this.value)">
-                    <option value="">Select Year and Exam</option>
-                    <option value="hsc_2025">HSC 2025</option>
-                    <option value="2025">SSC 2025</option>
-                    <option value="2024">SSC 2024</option>
-                    <option value="2023">SSC 2023</option>
-                    <option value="2022">SSC 2022</option>
-                    <option value="hsc_2024">HSC 2024</option>
-                    <option value="hsc_2023">HSC 2023</option>
-                </select>
-            </div>
-            <div id="content"></div>
-            
-            <div id="noDataMessage" style="display:none;">Oops! No data found.</div>
-        </section>
+    <div class="splashHint">Loading the test...</div>
+  </div>
+</div>
 
-<div class="new-box-wrapper" id="featuredBoxes">
-
-  <div class="featured-box" data-value="2025" onclick="handleFeaturedClick('2025', this)">
-    <div class="new-ribbon"><span style="position: relative; left: -14px;">RECHECK</span></div>
-
-    <div class="featured-text">
-      <div class="ssc-line">SSC</div>
-      <div class="year-line">25</div>
+<div class="app">
+  <div id="topRow">
+    <div id="logo"><i class="fa-solid fa-user-astronaut"></i><h1>Magi</h1></div>
+    <div id="progressWrap">
+      <div id="progressMeta">Q <span id="qIndex">0</span>/<span id="qTotal">0</span></div>
+      <div id="progressContainer"><div id="progressBar"></div></div>
     </div>
   </div>
-  
+  <h2>Test Yourself</h2>
 
-  <div class="featured-box" data-value="2024" onclick="handleFeaturedClick('2024', this)">
-    <div class="featured-text">
-      <div class="ssc-line">SSC</div>
-      <div class="year-line">24</div>
-    </div>
-  </div>
+  <div id="question">Loading...</div>
+  <div id="options"></div>
 
-  <div class="featured-box" data-value="2023" onclick="handleFeaturedClick('2023', this)">
-    <div class="featured-text">
-      <div class="new-ribbon">HOT</div>
-      <div class="ssc-line">SSC</div>
-      <div class="year-line">23</div>
-    </div>
-  </div>
-
-  <div class="featured-box" data-value="2022" onclick="handleFeaturedClick('2022', this)">
-    
-    <div class="featured-text">
-    
-      <div class="ssc-line">SSC</div>
-      <div class="year-line">22</div>
-    </div>
-  </div>
-
-  <div class="featured-box" data-value="hsc_2025" onclick="handleFeaturedClick('hsc_2025', this)">
-    <div class="new-ribbon">SOON</div>
-    <div class="featured-text">
-      <div class="ssc-line">HSC</div>
-      <div class="year-line">25</div>
-    </div>
-  </div>
-
-  <div class="featured-box" data-value="hsc_2024" onclick="handleFeaturedClick('hsc_2024', this)">
-    <div class="featured-text">
-      <div class="ssc-line">HSC</div>
-      <div class="year-line">24</div>
-    </div>
-  </div>
-
-  <div class="featured-box" data-value="hsc_2023" onclick="handleFeaturedClick('hsc_2023', this)">
-    <div class="featured-text">
-      <div class="ssc-line">HSC</div>
-      <div class="year-line">23</div>
+  <div id="outro">
+    <div id="finalTitle">✨ Your Score ✨</div>
+    <div id="finalScore"></div>
+    <div id="finalLine"></div>
+    <div id="finalActions">
+      <button id="resultButton" class="btn btn-pink"><i class="fa-solid fa-book-open"></i> Result</button>
+      <button id="restartButton" class="btn btn-ghost"><i class="fa-solid fa-rotate-right"></i> Restart</button>
+      <button id="shareButton" class="btn btn-primary"><i class="fa-solid fa-share-nodes"></i> Share This Website</button>
     </div>
   </div>
 </div>
 
-          
-    </main>
-
-
-    
-    <div id="popupWindow" style="display:none;">
-        <button id="closePopup" class="close-btn">&times;</button>
-        <div class="popup-content" id="popupContent"></div>
+<!-- Result Modal -->
+<div id="resultModal">
+  <div class="modalCard">
+    <div class="modalHeader">
+      <div class="modalTitle"><i class="fa-solid fa-book-open-reader"></i> Your Verdicts</div>
+      <button class="closeX" id="closeResult" aria-label="Close">✕</button>
     </div>
+    <div class="verdictList" id="verdictList"></div>
+  </div>
+</div>
 
-    <button onclick="scrollToTop()" id="scrollToTopBtn" title="Go to top">
-        <img src="arrow-up.png" alt="Scroll to top">
-    </button>
+<!-- Outro Splash (quick celebration) -->
+<div id="outroSplash" class="splash" style="display:none;">
+  <div class="splashInner">
+    <div class="splashLogo">
+      <i class="fa-solid fa-user-astronaut"></i>
+      <div class="splashTitle">Magi</div>
+    </div>
+    <div class="splashHint">Nice run ✨</div>
+  </div>
+</div>
 
-    
-    <script type="module">
+<div id="toast" class="toast"></div>
 
+<script>
+  let questions = [];
+  let currentQ = 0;
+  let score = 0;
+  let answers = []; // per-question choice + verdict
 
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getDatabase, ref, runTransaction, set, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-        const firebaseConfig = {
-          apiKey: "AIzaSyBaKVrTWKeaUxa0EaiDBR8OGpGCAjxAcUA",
-          authDomain: "boardrankctg.firebaseapp.com",
-          databaseURL: "https://boardrankctg-default-rtdb.asia-southeast1.firebasedatabase.app",
-          projectId: "boardrankctg",
-          storageBucket: "boardrankctg.firebasestorage.app",
-          messagingSenderId: "751761229963",
-          appId: "1:751761229963:web:43f9dbf71feef6dc9cec8e",
-          measurementId: "G-3Y6J44NWNH"
-        };
-      
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+  const colorClasses = ['optA','optB','optC','optD','optE'];
+  const letters = ['A','B','C','D','E'];
 
-window.db = db; 
+  const qIndexEl = document.getElementById('qIndex');
+  const qTotalEl = document.getElementById('qTotal');
 
+  const introSplash = document.getElementById('introSplash');
+  const outroSplash = document.getElementById('outroSplash');
 
-window.clickCountsCache = {};
-window._br_clickListenerSet = new Set();
+  const introStart = Date.now();
+  const introMin = 1000; // keep intro visible at least this long
 
+  // Load questions.json
+  fetch('questions.json')
+  .then(res => res.json())
+  .then(data => {
+    questions = data;
+    qTotalEl.textContent = questions.length;
+    updateProgress();
+    showQuestion();
 
-window.incrementClickCount = function(roll) {
-  if (!window.db) {
-    console.error("DB not ready for incrementClickCount");
-    return;
+    // ensure intro shows briefly and then hides after content is ready
+    const elapsed = Date.now() - introStart;
+    setTimeout(hideIntro, Math.max(0, introMin - elapsed));
+  })
+  .catch(() => {
+    document.getElementById('question').innerText = 'Failed to load questions.';
+    hideIntro();
+  });
+
+  function hideIntro(){
+    if(!introSplash || introSplash.style.display === 'none') return;
+    introSplash.classList.add('splashHide');
+    setTimeout(()=> introSplash.style.display='none', 600);
   }
-  try {
-    const clickRef = ref(window.db, `clickCounts/${roll}`);
-    runTransaction(clickRef, (count) => {
-      return (count || 0) + 1;
-    }).catch(err => console.error('incrementClickCount error', err));
-  } catch (e) {
-    console.error('incrementClickCount exception', e);
-  }
-};
 
-window.listenClickCount = function(roll, cb) {
-  if (!window.db) {
-    console.error("DB not ready for listenClickCount");
-    cb(0);
-    return;
-  }
-  try {
-    const clickRef = ref(window.db, `clickCounts/${roll}`);
-    onValue(clickRef, (snap) => {
-      const val = snap.val() || 0;
-      window.clickCountsCache[roll] = val;
-      cb(val);
-    });
-  } catch (e) {
-    console.error('listenClickCount exception', e);
-    cb(0);
-  }
-};
-
-      
-        let userId = localStorage.getItem("userId");
-        if (!userId) {
-          userId = crypto.randomUUID();
-          localStorage.setItem("userId", userId);
-        }
-      
-        const ADMIN_ID = "admin1234";
-      
-        function trackVisit() {
-          runTransaction(ref(db, "siteStats/totalVisits"), (count) => (count || 0) + 1);
-          set(ref(db, `siteStats/activeUsers/${userId}`), Date.now());
-        }
-      
-
-        function showAdminStats() {
-          const box = document.createElement("div");
-          box.style = "max-width: 600px; margin: 30px auto; padding: 12px; border: 2px solid #333; background: #f8f8f8;";
-          box.innerHTML = `<h3>📊 Site Stats (Admin Only)</h3><div id="visitStats">Loading...</div>`;
-          document.body.appendChild(box);
-      
-          const statsRef = ref(db, "siteStats");
-      
-          onValue(statsRef, (snapshot) => {
-            const data = snapshot.val() || {};
-            const total = data.totalVisits || 0;
-            const active = data.activeUsers || {};
-            const now = Date.now();
-            const live = Object.values(active).filter(ts => now - ts < 5 * 60 * 1000).length;
-      
-            document.getElementById("visitStats").innerHTML = `
-              👁️ Total Visits: <strong>${total}</strong><br />
-              🟢 Live Visitors (past 5 min): <strong>${live}</strong>
-            `;
-          });
-        }
-      
-        trackVisit();
-        if (userId === ADMIN_ID) showAdminStats();
-      </script>
-      
-    <script src="script.js"></script>
-
-    <footer>
-      &copy; 2025 BoardRankCTG — Made by Hasnyne
-    </footer>
-  
-</body>
-<style>
-  #firstVisitHint {
-    position: absolute;
-    z-index: 99999;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    animation: floatY 1s ease-in-out infinite;
-    pointer-events: none;
-  }
-  #firstVisitHint img {
-    width: 40px;
-    height: 40px;
-    animation: wiggle 0.8s infinite;
-  }
-  #firstVisitHint .bubble {
-    background: #fff;
-    color: #222;
-    border: 2px solid #333;
-    border-radius: 6px;
-    padding: 5px 8px;
-    font-size: 13px;
-    font-weight: bold;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    white-space: nowrap;
-  }
-  @keyframes wiggle {
-    0%,100% { transform: rotate(0deg); }
-    25% { transform: rotate(8deg); }
-    75% { transform: rotate(-8deg); }
-  }
-  @keyframes floatY {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-  }
-  </style>
-  
-  <script>
-  function showFirstVisitHint() {
-    if (localStorage.getItem('nameClickHintShown')) return;
-  
-    const firstNameCell = document.querySelector('.student-name');
-    if (!firstNameCell) return;
-  
-    const hint = document.createElement('div');
-    hint.id = 'firstVisitHint';
-    hint.innerHTML = `
-      <img src="https://img.icons8.com/emoji/48/backhand-index-pointing-left-light-skin-tone.png" alt="👈">
-      <div class="bubble">Click a student's name<br>for detailed results</div>
-    `;
-    document.body.appendChild(hint);
-  
-    function positionHint() {
-      const rect = firstNameCell.getBoundingClientRect();
-      hint.style.top = `${rect.top + window.scrollY + 5}px`;
-      hint.style.left = `${rect.right + window.scrollX - 20}px`; 
+  function showQuestion(){
+    if(currentQ >= questions.length){
+      showOutro();
+      return;
     }
-  
-    positionHint();
-    window.addEventListener('resize', positionHint);
-    window.addEventListener('scroll', positionHint);
-  
-    document.body.addEventListener('click', function handler(e) {
-      if (e.target.classList.contains('student-name')) {
-        hint.remove();
-        localStorage.setItem('nameClickHintShown', '1');
-        document.body.removeEventListener('click', handler);
+    const q = questions[currentQ];
+    document.getElementById('question').innerText = q.text;
+
+    const optionsDiv = document.getElementById('options');
+    optionsDiv.innerHTML = '';
+
+    const shuffledOptions = [...q.options].sort(()=>Math.random()-0.5);
+
+    shuffledOptions.forEach((opt, idx)=>{
+      const btn = document.createElement('button');
+      btn.className = `option ${colorClasses[idx]}`;
+      btn.innerHTML = `<span class="letter">${letters[idx]}</span> ${opt.text}`;
+      btn.onclick = ()=> handleChoice(q, opt);
+      optionsDiv.appendChild(btn);
+    });
+
+    // update progress labels
+    qIndexEl.textContent = currentQ + 1;
+  }
+
+  function handleChoice(q, opt){
+    score += opt.score;
+    answers.push({
+      id: q.id,
+      theme: q.theme,
+      question: q.text,
+      selectedText: opt.text,
+      score: opt.score,
+      verdict: q.verdicts[opt.score - 1]
+    });
+
+    currentQ++;
+    updateProgress();
+    showQuestion();
+  }
+
+  function updateProgress(){
+    const percent = (currentQ / (questions.length || 1)) * 100;
+    document.getElementById('progressBar').style.width = percent+'%';
+  }
+
+  function showOutro(){
+    document.getElementById('question').style.display = 'none';
+    document.getElementById('options').style.display = 'none';
+    document.getElementById('outro').style.display = 'flex';
+
+    const pct = getNormalizedPercent(score, questions.length);
+    document.getElementById('finalScore').innerText = pct + '%';
+    document.getElementById('finalLine').innerText = rangeLine(pct);
+
+    // celebration splash
+    quickCelebrate();
+
+    // buttons
+    document.getElementById('shareButton').onclick = shareSite;
+    document.getElementById('restartButton').onclick = restartQuiz;
+    document.getElementById('resultButton').onclick = openResults;
+  }
+
+  function restartQuiz(){
+    currentQ = 0;
+    score = 0;
+    answers = [];
+    document.getElementById('question').style.display = '';
+    document.getElementById('options').style.display = '';
+    document.getElementById('outro').style.display = 'none';
+    document.getElementById('resultModal').style.display = 'none';
+    qIndexEl.textContent = 1;
+    updateProgress();
+    showQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Results modal (verdicts)
+  const resultModal = document.getElementById('resultModal');
+  const verdictList = document.getElementById('verdictList');
+  document.getElementById('closeResult').addEventListener('click', closeResults);
+  resultModal.addEventListener('click', (e)=>{
+    if(e.target === resultModal) closeResults();
+  });
+
+  function openResults(){
+    verdictList.innerHTML = '';
+    answers.forEach((a, i)=>{
+      const card = document.createElement('div');
+      card.className = 'verdictCard';
+      card.innerHTML = `
+        <div class="vTop">
+          <div class="badge badge-theme">Q${i+1} — ${a.theme}</div>
+          <div class="badge badge-score">Score: ${a.score}</div>
+        </div>
+        <div class="qText">${a.question}</div>
+        <div class="choiceText"><strong>Your pick:</strong> ${a.selectedText}</div>
+        <div class="verdictText">${a.verdict}</div>
+      `;
+      verdictList.appendChild(card);
+    });
+    resultModal.style.display = 'flex';
+  }
+  function closeResults(){ resultModal.style.display = 'none'; }
+
+  // Outro celebration splash
+  function quickCelebrate(){
+    outroSplash.style.display = 'flex';
+
+    // Clear any previous stars
+    [...outroSplash.querySelectorAll('.star')].forEach(n=>n.remove());
+
+    for(let i=0;i<22;i++){
+      const s = document.createElement('div');
+      s.className = 'star';
+      const left = Math.random()*100;
+      const delay = Math.random()*300;
+      s.style.left = left+'%';
+      s.style.bottom = '12%';
+      s.style.animationDelay = delay+'ms';
+      outroSplash.appendChild(s);
+      setTimeout(()=> s.remove(), 1400 + delay);
+    }
+    setTimeout(()=>{
+      outroSplash.classList.add('splashHide');
+      setTimeout(()=> {
+        outroSplash.style.display='none';
+        outroSplash.classList.remove('splashHide');
+      }, 600);
+    }, 1200);
+  }
+
+  // Percentage helpers
+  function getNormalizedPercent(totalScore, count){
+    // Normalize 1–5 per question into 0–100%
+    const minPossible = count * 1;
+    const maxPossible = count * 5;
+    const pct = Math.round(((totalScore - minPossible) / (maxPossible - minPossible)) * 100);
+    return Math.max(0, Math.min(100, pct));
+  }
+
+  function rangeLine(p){
+    if(p < 20) return 'Sahim is gay';
+    if(p < 40) return 'Sahim is gay';
+    if(p < 60) return 'Sahim is gay';
+    if(p < 80) return 'Sahim is gay';
+    if(p < 95) return 'Sahim is gay';
+    return 'Sahim is gay';
+  }
+
+  // Share this website (Web Share API + clipboard fallback)
+  function shareSite(){
+    const url = window.location.href;
+    const text = 'Check out this website: Magi | Test Yourself';
+    if(navigator.share){
+      navigator.share({ title:'Magi | Test Yourself', text, url }).catch(()=>{});
+      return;
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(url).then(()=> toast('Link copied to clipboard!'));
+    } else {
+      const tmp = document.createElement('input');
+      tmp.value = url;
+      document.body.appendChild(tmp);
+      tmp.select();
+      try { document.execCommand('copy'); toast('Link copied to clipboard!'); } catch(e){}
+      tmp.remove();
+    }
+  }
+
+  // Toast helper
+  function toast(msg){
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(()=> el.classList.remove('show'), 1800);
+  }
+
+  // Optional: keyboard shortcuts (kept, but no on-screen hint)
+  window.addEventListener('keydown', (e)=>{
+    const k = e.key.toLowerCase();
+    const inQuiz = document.getElementById('options').style.display !== 'none';
+    const finished = document.getElementById('outro').style.display === 'flex';
+    const modalOpen = document.getElementById('resultModal').style.display === 'flex';
+
+    if(modalOpen) return;
+
+    if(inQuiz){
+      const idx = ['1','2','3','4','5'].indexOf(k);
+      const idxLetter = ['a','b','c','d','e'].indexOf(k);
+      let targetIdx = -1;
+      if(idx !== -1) targetIdx = idx;
+      if(idxLetter !== -1) targetIdx = idxLetter;
+      if(targetIdx > -1){
+        const btns = [...document.querySelectorAll('#options .option')];
+        if(btns[targetIdx]) btns[targetIdx].click();
       }
-    }, true);
-  }
-
-  const originalUpdateTableData = updateTableData;
-  updateTableData = function() {
-    originalUpdateTableData.apply(this, arguments);
-    if (!document.getElementById('firstVisitHint')) {
-      setTimeout(showFirstVisitHint, 200);
+    } else if(finished){
+      if(k === 'r'){ restartQuiz(); }
+      if(k === 'v'){ openResults(); }
     }
-  };
+  });
+</script>
 
-window.clickCountsCache = {};          
-window._br_clickListenerSet = new Set();
-
-window.incrementClickCount = function(roll) {
-  try {
-    runTransaction(ref(db, `clickCounts/${roll}`), (count) => (count || 0) + 1)
-      .catch(err => console.error('incrementClickCount error', err));
-  } catch (e) {
-    console.error('incrementClickCount exception', e);
-  }
-};
-
-window.listenClickCount = function(roll, cb) {
-  try {
-    const r = ref(db, `clickCounts/${roll}`);
-    onValue(r, (snap) => {
-      const val = snap.val() || 0;
-      window.clickCountsCache[roll] = val;
-      try { cb(val); } catch(e){ console.error('listen cb error', e); }
-    }, (err) => {
-      console.error('listenClickCount onValue error', err);
-      try { cb(0); } catch(e) {}
-    });
-  } catch (e) {
-    console.error('listenClickCount exception', e);
-    try { cb(0); } catch(e) {}
-  }
-};
-
-  </script>
-  
+</body>
 </html>
