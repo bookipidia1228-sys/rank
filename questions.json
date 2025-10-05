@@ -1,0 +1,192 @@
+[
+  {
+    "id": 1,
+    "text": "Q1. Who's the best English among them?",
+    "theme": "Language Roast",
+    "options": [
+      { "text": "Hasnyne", "score": 5 },
+      { "text": "Hasnyne", "score": 5 },
+      { "text": "Hasnyne", "score": 5 },
+      { "text": "Hasnyne", "score": 5 },
+      { "text": "Hasnyne", "score": 5 }
+    ],
+    "verdicts": [
+      "Sahim, still bad at English",
+      "Maybe try reading a book once",
+      "English is not your thing",
+      "Native vibes? Not here",
+      "Keep dreaming bro, Hasnyne wins"
+    ]
+  },
+  {
+    "id": 2,
+    "text": "Q2. Who's the greatest robber of all time?",
+    "theme": "Football Roast",
+    "options": [
+      { "text": "Pessi", "score": 5 },
+      { "text": "Pussy", "score": 5 },
+      { "text": "Pessidog", "score": 5 },
+      { "text": "Pepsi", "score": 5 },
+      { "text": "GayMessi", "score": 5 }
+    ],
+    "verdicts": [
+      "Still crying since 2022",
+      "Biggest robbery king",
+      "Your idol keeps stealing",
+      "No one does it like him",
+      "Accept it Sahim, Pessi robs hard"
+    ]
+  },
+  {
+    "id": 3,
+    "text": "Q3. Biggest robbery ever?",
+    "theme": "Football Roast",
+    "options": [
+      { "text": "2009 Chelsea", "score": 5 },
+      { "text": "2015 PSG", "score": 5 },
+      { "text": "2018 Copa del Rey final", "score": 5 },
+      { "text": "2022 Ned WC quarter", "score": 5 },
+      { "text": "All of them", "score": 5 }
+    ],
+    "verdicts": [
+      "Barca robbery archives unlocked",
+      "Sahim still crying 24/7",
+      "Biggest scams in football history",
+      "No excuse bro, all robbed",
+      "You cannot deny it"
+    ]
+  },
+  {
+    "id": 4,
+    "text": "Q4. Pessi robbed whom the hardest?",
+    "theme": "Football Roast",
+    "options": [
+      { "text": "Neymar", "score": 5 },
+      { "text": "Iniesta", "score": 5 },
+      { "text": "Van Dijk", "score": 5 },
+      { "text": "Halaand", "score": 5 },
+      { "text": "Lewandoski", "score": 5 }
+    ],
+    "verdicts": [
+      "Your Zionist idol still robs history books",
+      "Pessi takes no mercy",
+      "Everyone got owned bro",
+      "Your arguments crumble",
+      "Stop crying Sahim"
+    ]
+  },
+  {
+    "id": 5,
+    "text": "Q5. Gayest nation?",
+    "theme": "Gay Roast",
+    "options": [
+      { "text": "Argentina", "score": 5 },
+      { "text": "Israel", "score": 5 },
+      { "text": "India", "score": 5 },
+      { "text": "USA", "score": 5 },
+      { "text": "All of them", "score": 5 }
+    ],
+    "verdicts": [
+      "Rainbow vibes everywhere",
+      "Your idol belongs there",
+      "Accept the truth bro",
+      "Sahim still arguing",
+      "Gayest nations confirmed"
+    ]
+  },
+  {
+    "id": 6,
+    "text": "Q6. Which one is fact?",
+    "theme": "Football Knowledge",
+    "options": [
+      { "text": "Bellingham > Pedri", "score": 5 },
+      { "text": "Modric > Iniesta", "score": 5 },
+      { "text": "Casimero > Busquet", "score": 5 },
+      { "text": "Kroos > Xavi", "score": 5 },
+      { "text": "Benzema > Suarez", "score": 5 }
+    ],
+    "verdicts": [
+      "Sahim, admit it, your arguments crumble",
+      "No debate here",
+      "Facts own you bro",
+      "Better players confirmed",
+      "Stop crying, learn football"
+    ]
+  },
+  {
+    "id": 7,
+    "text": "Q7. Pick one 😘 ",
+    "theme": "Shipping Roast",
+    "options": [
+      { "text": "Tasin", "score": 5 },
+      { "text": "Nabil", "score": 5 },
+      { "text": "Nihal", "score": 5 },
+      { "text": "All of them", "score": 5 },
+      { "text": "Hasnyne 💋", "score": 0 }
+    ],
+    "verdicts": [
+      "Sahim, you know the truth",
+      "Shipping confirmed",
+      "All options messy",
+      "You are still jealous",
+      "Pick and cry bro"
+    ]
+  },
+  {
+    "id": 8,
+    "text": "Q8. Chapri sport?",
+    "theme": "Local Roast",
+    "options": [
+      { "text": "Cricket ", "score": 5 },
+      { "text": "Cricket ", "score": 5 },
+      { "text": "Cricket ", "score": 5 },
+      { "text": "Cricket ", "score": 5 },
+      { "text": "Cricket ", "score": 5 }
+    ],
+    "verdicts": [
+      "Chapri sports confirmed",
+      "Sahim still bad",
+      "Village level games only",
+      "You cannot escape",
+      "Stop crying, accept it"
+    ]
+  },
+  {
+    "id": 9,
+    "text": "Q9. Cox's Bazar is?",
+    "theme": "Location Roast",
+    "options": [
+      { "text": "Chapri", "score": 5 },
+      { "text": "Bosti", "score": 5 },
+      { "text": "Gorib", "score": 5 },
+      { "text": "Gram ", "score": 5 },
+      { "text": "All of them", "score": 5 }
+    ],
+    "verdicts": [
+      "Village life confirmed",
+      "Poor area vibes",
+      "Still crying Sahim",
+      "Bosti king owns nothing",
+      "Cox's Bazar reality check"
+    ]
+  },
+  {
+    "id": 10,
+    "text": "Q10. Do you remeber Glubar lobon shonket?",
+    "theme": "Science Roast",
+    "options": [
+      { "text": "Yes", "score": 5 },
+      { "text": "No", "score": 0 },
+      { "text": "Maybe", "score": 2 },
+      { "text": "Not sure", "score": 2 },
+      { "text": "I give up", "score": 1 }
+    ],
+    "verdicts": [
+      "Salt symbol still owns you",
+      "Science is hard bro",
+      "Stop pretending",
+      "Sahim, admit your weakness",
+      "Glubar owns your brain"
+    ]
+  }
+]
